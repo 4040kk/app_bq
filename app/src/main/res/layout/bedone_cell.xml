@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="wrap_content"
+    android:layout_height="75dp"
+    >
+
+
+    <ImageView
+        android:id="@+id/dddddd"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_x="408dp"
+        android:layout_y="-1dp"
+        android:translationZ="10dp" />
+
+    <ImageView
+        android:id="@+id/bedonecell_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="381dp"
+        android:layout_y="22dp" />
+
+
+    <ImageView
+        android:id="@+id/dddd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_x="0dp"
+        android:layout_y="1dp"
+        android:background="@drawable/shadow" />
+
+    <TextView
+        android:id="@+id/bedonelist_class"
+        android:layout_width="219dp"
+        android:layout_height="32dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="2sp"
+        android:layout_x="55dp"
+        android:layout_y="10dp"
+        android:gravity="center|left"
+        android:lineSpacingExtra="8sp"
+        android:maxWidth="270dp"
+        android:maxLines="1"
+        android:text="tv"
+        android:textAllCaps="true"
+        android:textColor="#191616"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.309"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+</AbsoluteLayout>

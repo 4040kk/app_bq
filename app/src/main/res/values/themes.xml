@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TEXT" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#458EC6</item>
+        <item name="colorPrimaryVariant">#003700B3</item>
+        <item name="colorOnPrimary">#90E0EA</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">#00000000</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#2A5F8E</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.TEXT.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TEXT.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TEXT.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

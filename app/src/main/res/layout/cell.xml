@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+
+    >
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_x="390dp"
+        android:layout_y="-2dp"
+        android:translationZ="10dp" />
+
+    <ImageView
+        android:id="@+id/cell_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="381dp"
+        android:layout_y="22dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_x="0dp"
+        android:layout_y="0dp"
+        android:background="@drawable/shadow" />
+
+
+    <TextView
+        android:id="@+id/list_class"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16sp"
+        android:layout_x="53dp"
+        android:layout_y="4dp"
+        android:background="#F6F8F8"
+        android:gravity="left"
+        android:maxLines="1"
+        android:shadowColor="#373333"
+        android:text="科目"
+        android:textColor="#171616"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/list_content"
+        android:layout_width="226dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2sp"
+        android:layout_x="77dp"
+        android:layout_y="24dp"
+        android:maxWidth="280dp"
+        android:maxLines="1"
+        android:text="tv"
+        android:textColor="#191616"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.309"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/list_time"
+        android:layout_width="156dp"
+        android:layout_height="wrap_content"
+        android:layout_x="193dp"
+        android:layout_y="9dp"
+        android:gravity="center"
+        android:textColor="#1B1818"
+        android:textSize="8dp" />
+
+    <ImageView
+        android:id="@+id/importent"
+        android:layout_width="42dp"
+        android:layout_height="40dp"
+        android:layout_x="1dp"
+        android:layout_y="2dp"
+        android:background="@android:drawable/btn_star_big_on" />
+
+
+</AbsoluteLayout>
