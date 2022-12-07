@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/register_p0"
-    tools:context=".ui.user.RegisterActivity">
+    tools:context=".RegisterActivity0">
 
     <EditText
         android:id="@+id/RegisterCode"

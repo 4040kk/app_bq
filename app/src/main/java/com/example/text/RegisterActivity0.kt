@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cn.leancloud.LCUser
+import com.example.supernotes.utils.sendmail
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import kotlin.random.Random
@@ -41,7 +42,8 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 emailcode = Random.nextInt(100000, 999999)
                 message = "验证码为$emailcode,有效期为五分钟，请勿泄露给他人"
                 if (isEmail(inputEmail)) {
-                    sendmessage(message)
+                    Thread{
+                        sendmail.SendEmai.sendMail(inputEmail,emailcode.toString())}.start()
                     Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
@@ -65,6 +67,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val user = LCUser()
                 val Wait:ProgressBar =findViewById(R.id.progressBar2)
                 val content=this;
+                emailcode = Random.nextInt(100000, 999999)
 
                 if(isEmailCode(inputEmailCode,emailcode.toString()) && registerPassWord(inputPassword)&&item.isChecked) {
                     if (isEmail(inputEmail)){
@@ -159,7 +162,7 @@ fun isEmailCode(inputEmaiCode:String,emaiCode:String):Boolean {
         true
     }
     else{
-        true
+        false
     }
 }
 
