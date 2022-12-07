@@ -5,29 +5,30 @@ import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import com.example.text.R
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import cn.leancloud.LCUser
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import kotlin.random.Random
 
+
 open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
+     val content=this;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         val buttonSendMessage: Button =findViewById(R.id.sendmessage)
         buttonSendMessage.setOnClickListener(this)
-
         val buttonCreat: Button =findViewById(R.id.register_success)
         buttonCreat.setOnClickListener(this)
         val textItems: TextView =findViewById(R.id.item1)
         textItems.setOnClickListener(this)
+        val Wait:ProgressBar =findViewById(R.id.progressBar2)
+        Wait.visibility=View.INVISIBLE;
     }
 
     var emailcode=0
@@ -61,9 +62,63 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val inputEmailCode=code.text.toString()
                 val inputEmail = eami.text.toString()
                 val item: CheckBox =findViewById(R.id.item)
+                val user = LCUser()
+                val Wait:ProgressBar =findViewById(R.id.progressBar2)
+                val content=this;
+
                 if(isEmailCode(inputEmailCode,emailcode.toString()) && registerPassWord(inputPassword)&&item.isChecked) {
-                    Toast.makeText(this,"注册成功", Toast.LENGTH_SHORT).show()
-                    val dbHelper=MyDatabaseHelper(this,"Users.db",1)
+                    if (isEmail(inputEmail)){
+                        user.apply {
+                            username= inputEmail;
+                            password=inputPassword;
+                            Wait.visibility=View.VISIBLE;
+                            signUpInBackground().subscribe(object :Observer<LCUser>{
+                                override fun onSubscribe(d: Disposable) {}
+
+                                override fun onNext(t: LCUser) {
+                                    //加邮箱验证码后执行以下代码:////////////
+                                    Toast.makeText(content,"注册成功",Toast.LENGTH_SHORT).show();
+                                    LCUser.logIn(inputEmail,inputPassword).subscribe(object :Observer<LCUser>{
+                                        override fun onComplete() { }
+
+                                        override fun onError(e: Throwable) {
+                                            Toast.makeText(content,"${e.message}",Toast.LENGTH_SHORT).show();
+                                            Wait.visibility=View.INVISIBLE;
+                                        }
+
+                                        override fun onNext(t: LCUser) {
+                                            Wait.visibility=View.INVISIBLE;
+                                            val intent = Intent(content, MainActivity::class.java)
+                                            startActivity(intent)
+                                            finish();
+                                        }
+
+                                        override fun onSubscribe(d: Disposable) {}
+
+
+                                    })
+                                    //////////////////////////////
+                                }
+
+                                override fun onError(e: Throwable) {
+                                    Toast.makeText(content,"${e.message}",Toast.LENGTH_SHORT).show();
+                                    Wait.visibility=View.INVISIBLE;
+                                }
+
+                                override fun onComplete() {
+                                }
+
+
+                            })
+                        }
+                    }else {
+                        Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
+                    }
+
+                    ///////////////////////////////////////////////////////////////////////////////////
+
+                   // Toast.makeText(this,"注册成功", Toast.LENGTH_SHORT).show()
+                   /* val dbHelper=MyDatabaseHelper(this,"Users.db",1)
                     dbHelper.writableDatabase
                     val db=dbHelper.writableDatabase
                     val user= ContentValues().apply {
@@ -71,9 +126,10 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                         Log.d("asd","+++++++++++++++++++++++")
                         put("password","$inputPassword")
                     }
+
                     db.insert("User",null,user)
                     val intent = Intent(this, LoginActivity1::class.java)
-                    startActivity(intent)
+                    startActivity(intent)*/
                 }
                 else if (item.isChecked==false){
                     Toast.makeText(this,"请同意用户协议", Toast.LENGTH_SHORT).show()
