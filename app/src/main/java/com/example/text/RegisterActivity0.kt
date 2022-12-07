@@ -1,12 +1,10 @@
 package com.example.text
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +33,8 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
     var emailcode=0
     private lateinit var message:String
     override fun onClick(v: View?) {
+        val Wait:ProgressBar =findViewById(R.id.progressBar2)
+        Wait.visibility=View.VISIBLE;
         val eami: EditText = findViewById(R.id.RegisterAccount)
         when (v?.id) {
             R.id.sendmessage -> {
@@ -43,9 +43,11 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 message = "验证码为$emailcode,有效期为五分钟，请勿泄露给他人"
                 if (isEmail(inputEmail)) {
                     Thread{
+                        Wait.visibility=View.INVISIBLE;
                         sendmail.SendEmai.sendMail(inputEmail,emailcode.toString())}.start()
                     Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show()
                 } else {
+                    Wait.visibility=View.INVISIBLE;
                     Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -67,7 +69,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val user = LCUser()
                 val Wait:ProgressBar =findViewById(R.id.progressBar2)
                 val content=this;
-                emailcode = Random.nextInt(100000, 999999)
+                //emailcode = Random.nextInt(100000, 999999)
 
                 if(isEmailCode(inputEmailCode,emailcode.toString()) && registerPassWord(inputPassword)&&item.isChecked) {
                     if (isEmail(inputEmail)){
