@@ -43,11 +43,9 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 message = "验证码为$emailcode,有效期为五分钟，请勿泄露给他人"
                 if (isEmail(inputEmail)) {
                     Thread{
-                        Wait.visibility=View.INVISIBLE;
                         sendmail.SendEmai.sendMail(inputEmail,emailcode.toString())}.start()
                     Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show()
                 } else {
-                    Wait.visibility=View.INVISIBLE;
                     Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -69,7 +67,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val user = LCUser()
                 val Wait:ProgressBar =findViewById(R.id.progressBar2)
                 val content=this;
-                //emailcode = Random.nextInt(100000, 999999)
+                emailcode = Random.nextInt(100000, 999999)
 
                 if(isEmailCode(inputEmailCode,emailcode.toString()) && registerPassWord(inputPassword)&&item.isChecked) {
                     if (isEmail(inputEmail)){
