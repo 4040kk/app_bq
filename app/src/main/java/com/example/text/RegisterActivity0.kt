@@ -33,14 +33,12 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
     }
 
     var emailcode=0
-    private lateinit var message:String
     override fun onClick(v: View?) {
-        val eami: EditText = findViewById(R.id.RegisterAccount)
+        val email: EditText = findViewById(R.id.RegisterAccount)
         when (v?.id) {
             R.id.sendmessage -> {
-                val inputEmail = eami.text.toString()
+                val inputEmail = email.text.toString()
                 emailcode = Random.nextInt(100000, 999999)
-                message = "验证码为$emailcode,有效期为五分钟，请勿泄露给他人"
                 if (isEmail(inputEmail)) {
                     Thread{
                         sendmail.SendEmai.sendMail(inputEmail,emailcode.toString())}.start()
@@ -62,7 +60,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val inputPassword=passWord.text.toString()
                 val code: EditText =findViewById(R.id.RegisterCode)
                 val inputEmailCode=code.text.toString()
-                val inputEmail = eami.text.toString()
+                val inputEmail = email.text.toString()
                 val item: CheckBox =findViewById(R.id.item)
                 val user = LCUser()
                 val Wait:ProgressBar =findViewById(R.id.progressBar2)
