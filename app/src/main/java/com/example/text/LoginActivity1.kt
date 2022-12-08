@@ -5,11 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cn.leancloud.LCUser
 import io.reactivex.Observer
@@ -95,6 +91,7 @@ class LoginActivity1 : AppCompatActivity(),View.OnClickListener {
         }
 
     }
+
     @SuppressLint("Range")
     fun isUser(inputAccount:String,inputPassword:String):Boolean{
         val dbHelper= MyDatabaseHelper(this,"Users.db",1)

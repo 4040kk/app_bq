@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    android:id="@+id/cell"
     android:layout_width="match_parent"
     android:layout_height="75dp"
-
     >
 
 
     <ImageView
+        android:id="@+id/cell_back1"
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_x="390dp"
         android:layout_y="-2dp"
         android:translationZ="10dp" />
 
-    <ImageView
-        android:id="@+id/cell_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="381dp"
-        android:layout_y="22dp" />
 
     <ImageView
+        android:id="@+id/cell_back"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_x="0dp"

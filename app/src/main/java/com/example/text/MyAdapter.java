@@ -1,24 +1,14 @@
 package com.example.text;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import org.w3c.dom.Text;
 
 public class MyAdapter extends BaseAdapter {
 
@@ -62,8 +52,7 @@ public class MyAdapter extends BaseAdapter {
         TextView timetv=(TextView) layout.findViewById ( R.id.list_time );
         TextView classtv=(TextView)layout.findViewById ( R.id.list_class );
         ImageView importent=(ImageView)layout.findViewById ( R.id.importent );
-
-
+        AbsoluteLayout cell=(AbsoluteLayout)layout.findViewById ( R.id.cell);
         cursor.moveToPosition ( Position );
         boolean ptxt =false;
 
@@ -88,9 +77,9 @@ public class MyAdapter extends BaseAdapter {
 
         if (IMP.equals ( "yes" )){importent.setVisibility ( View.VISIBLE );}
         else{importent.setVisibility ( View.INVISIBLE );}
-
+        strings[0]=classc;
         if (kay.equals ( "1" )){
-            int i=0;
+            int i=1;
             if (INTI==true){
                 while (cursor.moveToNext ()){
                     int index1=cursor.getColumnIndex ( "class" );
@@ -116,10 +105,8 @@ public class MyAdapter extends BaseAdapter {
               classtv.setText ( classc );
               contenttv.setText ( content);
           }else {
-
-              classtv.setText ( " " );
-              contenttv.setText ( " ");
-
+              cell.setVisibility ( View.GONE );
+              return layout;
           }
           ptxt=false;
 

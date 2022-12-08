@@ -1,14 +1,13 @@
 package com.example.text;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +54,7 @@ public class todoet extends AppCompatActivity {
         cv.put ( BeDoneDB.TIME,getTime () );
         //cv.put ( BeDoneDB.CLASS,ed_todo.getText ().toString () );
         long insert = dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
-        Toast.makeText ( todoet.this,insert+"",Toast.LENGTH_SHORT ).show ();
+        //Toast.makeText ( todoet.this,insert+"",Toast.LENGTH_SHORT ).show ();
     }
     private String getTime(){
         SimpleDateFormat format=new SimpleDateFormat ("yy.MM.dd HH:mm");

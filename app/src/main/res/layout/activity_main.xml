@@ -27,15 +27,14 @@
 
         <ListView
             android:id="@+id/main_list"
-            android:layout_width="313dp"
-            android:layout_height="521dp"
+            android:layout_width="355dp"
+            android:layout_height="557dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.377"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.504" />
+            app:layout_constraintVertical_bias="0.402" />
 
         <Button
             android:id="@+id/bedonemain_bedone"
@@ -65,30 +64,41 @@
             app:layout_constraintVertical_bias="0.986" />
 
 
-        <Button
-            android:id="@+id/main_find"
-            android:layout_width="42dp"
-            android:layout_height="43dp"
-            android:background="@drawable/rio"
-            android:foreground="@android:drawable/ic_menu_search"
-            app:layout_constraintBottom_toTopOf="@+id/bedonemain_bedone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.888"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.086" />
-
         <Switch
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
-            android:text="编辑时间"
             android:layout_height="wrap_content"
+            android:text="编辑时间"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.69"
+            app:layout_constraintHorizontal_bias="0.857"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.099" />
+            app:layout_constraintVertical_bias="0.061" />
+
+        <Button
+            android:id="@+id/put_LC"
+            android:layout_width="53dp"
+            android:layout_height="51dp"
+            android:text="上传"
+            app:layout_constraintBottom_toTopOf="@+id/main_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.078"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.842" />
+
+        <Button
+            android:id="@+id/get_LC"
+            android:layout_width="53dp"
+            android:layout_height="51dp"
+            android:text="同步"
+            app:layout_constraintBottom_toTopOf="@+id/main_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.086"
+            app:layout_constraintStart_toEndOf="@+id/put_LC"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.842" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,7 +115,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -157,6 +168,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
+            <EditText
+                android:id="@+id/main_find0"
+                android:layout_width="270dp"
+                android:layout_height="60dp"
+                android:hint="搜索便签内容"
+                android:gravity="center"
+                android:background="@drawable/rio"
+                android:backgroundTint="#7EACAE" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/find_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="确认" />
+
+                <Button
+                    android:id="@+id/find_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="取消" />
+
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/find_text"
+                android:layout_width="268dp"
+                android:layout_height="558dp" />
 
         </LinearLayout>
 
