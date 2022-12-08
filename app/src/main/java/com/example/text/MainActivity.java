@@ -49,8 +49,8 @@ public class MainActivity extends Activity {
     private Switch aSwitch;
     private EditText find_text;
     private int get_BeDb_ID;
-    private LCUser author = LCUser.getCurrentUser();
-    private String name =author.getUsername ();
+    private LCUser author;
+    private String name ;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
 
@@ -204,6 +204,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick (View view) {
                 dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
+                onResume();
                 LCQuery<LCObject> query = new LCQuery<> ("TODO");
                 query.whereEqualTo("user", name);
                 query.findInBackground().subscribe(new Observer<List<LCObject>>() {
@@ -262,6 +263,8 @@ public class MainActivity extends Activity {
         putlc=(Button)findViewById ( R.id.put_LC );
         set_findtext="";
         ViewOP ="0";
+        author = LCUser.getCurrentUser();
+        name =author.getUsername ();
         SeeTime=false;
     }
 
