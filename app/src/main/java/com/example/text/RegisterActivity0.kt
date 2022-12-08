@@ -35,10 +35,10 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         val Wait:ProgressBar =findViewById(R.id.progressBar2)
         Wait.visibility=View.VISIBLE;
-        val eami: EditText = findViewById(R.id.RegisterAccount)
+        val email: EditText = findViewById(R.id.RegisterAccount)
         when (v?.id) {
             R.id.sendmessage -> {
-                val inputEmail = eami.text.toString()
+                val inputEmail = email.text.toString()
                 emailcode = Random.nextInt(100000, 999999)
                 message = "验证码为$emailcode,有效期为五分钟，请勿泄露给他人"
                 if (isEmail(inputEmail)) {
@@ -62,12 +62,11 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 val inputPassword=passWord.text.toString()
                 val code: EditText =findViewById(R.id.RegisterCode)
                 val inputEmailCode=code.text.toString()
-                val inputEmail = eami.text.toString()
+                val inputEmail = email.text.toString()
                 val item: CheckBox =findViewById(R.id.item)
                 val user = LCUser()
                 val Wait:ProgressBar =findViewById(R.id.progressBar2)
                 val content=this;
-                emailcode = Random.nextInt(100000, 999999)
 
                 if(isEmailCode(inputEmailCode,emailcode.toString()) && registerPassWord(inputPassword)&&item.isChecked) {
                     if (isEmail(inputEmail)){
@@ -153,26 +152,15 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
 }
 
 fun  isEmail(emali:String):Boolean{
-    return if(emali.endsWith("@qq.com")||emali.endsWith("@163.com")){ true }
-    else{ false }
+    return emali.endsWith("@qq.com")||emali.endsWith("@163.com")
 }
 
 fun isEmailCode(inputEmaiCode:String,emaiCode:String):Boolean {
-    return if(inputEmaiCode==emaiCode){
-        true
-    }
-    else{
-        false
-    }
+    return inputEmaiCode==emaiCode
 }
 
 fun registerPassWord(inputPassWord:String):Boolean{
-    if(inputPassWord.length<6){
-        return false
-    }
-    else{
-        return true
-    }
+    return inputPassWord.length >= 6
 }
 
 class MyDatabaseHelper(var context: Context, name: String, version: Int) :
