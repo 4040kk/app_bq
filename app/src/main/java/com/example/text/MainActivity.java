@@ -120,8 +120,10 @@ public class MainActivity extends Activity {
             public void onClick (View view) {
                Intent intent=new Intent (MainActivity.this,LoginActivity1.class);
                 startActivity ( intent);
-                author = LCUser.getCurrentUser();
-                name =author.getUsername ();
+                if (author!=null){
+                    author = LCUser.getCurrentUser();
+                    name =author.getUsername ();
+                }
             }
         } );
 
@@ -169,8 +171,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick (View view) {
                 wait.setVisibility ( View.VISIBLE );
-                author = LCUser.getCurrentUser();
-                name =author.getUsername ();
+                if (author!=null){
+                    author = LCUser.getCurrentUser();
+                    name =author.getUsername ();
+                }
                 int co;
                 delet();
                 delay ( 100 );
@@ -252,8 +256,11 @@ public class MainActivity extends Activity {
             @Override
             public void onClick (View view) {
                 wait.setVisibility ( View.VISIBLE );
-                author = LCUser.getCurrentUser();
-                name =author.getUsername ();
+                if (author!=null){
+                    author = LCUser.getCurrentUser();
+                    name =author.getUsername ();
+                }
+
                 dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
                 onResume();
                 LCQuery<LCObject> query = new LCQuery<> ("TODO");
@@ -342,8 +349,12 @@ public class MainActivity extends Activity {
         wait.setVisibility ( View.INVISIBLE );
         set_findtext="";
         ViewOP ="0";
-        author = LCUser.getCurrentUser();
-        name =author.getUsername ();
+        if (author!=null){
+            author = LCUser.getCurrentUser();
+            name =author.getUsername ();
+
+        }
+
         SeeTime=false;
     }
 
