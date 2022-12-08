@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends Activity {
 
-
+    private Boolean A=true;
     private Button login,getlc,putlc,bedone,find_in;
     private FloatingActionButton add;
     private ListView lv,lv_todo,find_list;;
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
     private NotesDB notesDB;
     private BeDoneDB beDoneDB;
     private BeDone_Adapter adapter_todo;
-    private SQLiteDatabase dbReader,dbReader_todo,dbWriter;
+    private SQLiteDatabase dbReader,dbReader_todo,dbWriter,dbWriter_note;
     private Cursor cursor,cursor_todo;
     private String ViewOP;
     private Boolean SeeTime;
@@ -51,6 +52,7 @@ public class MainActivity extends Activity {
     private int get_BeDb_ID;
     private LCUser author;
     private String name ;
+    private ProgressBar wait;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
 
@@ -166,6 +168,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick (View view) {
+                wait.setVisibility ( View.VISIBLE );
                 author = LCUser.getCurrentUser();
                 name =author.getUsername ();
                 int co;
@@ -188,6 +191,7 @@ public class MainActivity extends Activity {
                         @Override
                         public void onNext (LCObject lcObject) {
 
+                            onResume();
                         }
 
                         @Override
@@ -200,6 +204,46 @@ public class MainActivity extends Activity {
                         }
                     } );
                 }
+
+                cursor=dbReader.query ( NotesDB.TABLE_NAME,null,null,null,null,null,null );
+                String classno=null;
+                A=true;
+                while (cursor.moveToNext ()){
+                    co = cursor.getColumnIndex ( "content" );
+                    if (co > -1) text = cursor.getString (co);
+                    co = cursor.getColumnIndex ( "class" );
+                    if (co > -1) classno = cursor.getString (co);
+
+                    LCObject note=new LCObject ( "NOTE" );
+                    note.put ( "CONTENT",text);
+                    note.put ( "user",name );
+                    note.put ( "CLASS",classno );
+                    //Log.d ( "text1111",text);
+
+                    note.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
+                        @Override
+                        public void onSubscribe (Disposable d) {
+
+                        }
+                        @Override
+                        public void onNext (LCObject lcObject) {
+                            if (A){ Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );}
+                                A=false;
+                        }
+
+                        @Override
+                        public void onError (Throwable e) {
+                            Toast.makeText ( MainActivity.this, e.toString (), Toast.LENGTH_SHORT ).show ( );
+                        }
+
+                        @Override
+                        public void onComplete ( ) {
+
+                        }
+                    } );
+                    A=false;
+                }
+                wait.setVisibility ( View.INVISIBLE );
                 onResume();
             }
         } );
@@ -207,6 +251,7 @@ public class MainActivity extends Activity {
         getlc.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public void onClick (View view) {
+                wait.setVisibility ( View.VISIBLE );
                 author = LCUser.getCurrentUser();
                 name =author.getUsername ();
                 dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
@@ -224,7 +269,7 @@ public class MainActivity extends Activity {
                                 cv.put (BeDoneDB.CONTENT,students.get(i).getString ( "TEXT" ));
                                 cv.put ( BeDoneDB.TIME,getTime () );
                                 long insert = dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
-                                //Toast.makeText ( MainActivity.this,insert+"",Toast.LENGTH_SHORT ).show ();
+                                onResume();
                             }
                         }
 
@@ -235,9 +280,34 @@ public class MainActivity extends Activity {
                     public void onComplete() {}
                 });
 
-            }
-        } );
-        onResume();
+                dbWriter_note.delete ( NotesDB.TABLE_NAME,null,null );
+                LCQuery<LCObject> query1 = new LCQuery<> ("NOTE");
+                query1.whereEqualTo("user", name);
+                query1.findInBackground().subscribe(new Observer<List<LCObject>>() {
+                    public void onSubscribe(Disposable disposable) {}
+                    public void onNext(List<LCObject> students) {
+                        for (int i = 0; i < students.size(); i++) {
+                            if (students.get(i).getString ( "CLASS" )!=null){
+                                ContentValues cv=new ContentValues ( );
+                                cv.put (NotesDB.CLASS,students.get(i).getString ( "CLASS" ));
+                                cv.put (NotesDB.CONTENT,students.get(i).getString ( "CONTENT" ));
+                                cv.put (NotesDB.IMPORTENT,students.get(i).getString ( "IMPORTENT" ));
+                                cv.put ( NotesDB.PATH,students.get ( i ).getString ( "PATH" ) );
+                                cv.put ( NotesDB.TIME,getTime () );
+                                dbWriter_note.insert ( NotesDB.TABLE_NAME, null, cv );
+                                onResume();
+                            }
+                        }
+
+                    }
+                    public void onError(Throwable throwable) {
+                        Toast.makeText ( MainActivity.this, throwable.toString (), Toast.LENGTH_SHORT ).show ( );
+                    }
+                    public void onComplete() {}
+                });
+                wait.setVisibility ( View.INVISIBLE );
+            }} );
+
 
 
     }
@@ -255,6 +325,7 @@ public class MainActivity extends Activity {
         dbReader =notesDB.getReadableDatabase ();
         dbReader_todo=beDoneDB.getReadableDatabase ();
         dbWriter=beDoneDB.getWritableDatabase ();
+        dbWriter_note=notesDB.getWritableDatabase ();
         login=(Button)findViewById ( R.id.Login );
         bedone=(Button)findViewById ( R.id.bedonemain_bedone );
         lv=(ListView) findViewById ( R.id.main_list);
@@ -267,6 +338,8 @@ public class MainActivity extends Activity {
         find_text=(EditText)findViewById ( R.id.main_find0);
         getlc=(Button)findViewById ( R.id.get_LC );
         putlc=(Button)findViewById ( R.id.put_LC );
+        wait=(ProgressBar)findViewById ( R.id.main_wait );
+        wait.setVisibility ( View.INVISIBLE );
         set_findtext="";
         ViewOP ="0";
         author = LCUser.getCurrentUser();
@@ -339,6 +412,44 @@ public class MainActivity extends Activity {
             }
             public void onComplete() {}
         });
+
+        LCQuery<LCObject> query1 = new LCQuery<> ("NOTE");
+        query1.whereEqualTo("user", name);
+        query1.findInBackground().subscribe(new Observer<List<LCObject>>() {
+            public void onSubscribe(Disposable disposable) {}
+            public void onNext(List<LCObject> students) {
+                for (int i = 0; i < students.size(); i++) {
+                    System.out.println(students.get(i) );
+                    if (students.get(i).getString ( "objectId" )!=null){
+                        LCObject notes = LCObject.createWithoutData("NOTE", students.get(i).getString ( "objectId" ));
+                        // Toast.makeText ( MainActivity.this, students.get(i).getString ( "objectId" ), Toast.LENGTH_SHORT ).show ( );
+                        notes.deleteInBackground().subscribe(new Observer<LCNull>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {}
+
+                            @Override
+                            public void onNext(LCNull response) {
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                System.out.println("failed to delete a todo: " + e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {}
+                        });
+                    }
+                }
+
+            }
+            public void onError(Throwable throwable) {
+                Toast.makeText ( MainActivity.this, throwable.toString (), Toast.LENGTH_SHORT ).show ( );
+            }
+            public void onComplete() {}
+        });
+
 
     }
 }
