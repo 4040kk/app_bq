@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ import io.reactivex.disposables.Disposable;
 public class MainActivity extends Activity {
 
     private Boolean A=true;
-    private Button login,getlc,putlc,bedone,find_in;
+    private Button login,getlc,putlc,bedone,find_in,user_out;
     private FloatingActionButton add;
     private ListView lv,lv_todo,find_list;;
     private MyAdapter adapter;
@@ -49,6 +50,7 @@ public class MainActivity extends Activity {
     private String set_findtext,nowuser,nowkey;
     private Switch aSwitch;
     private EditText find_text;
+    private TextView username;
     private int get_BeDb_ID;
     private LCUser author;
     private String name ;
@@ -114,16 +116,22 @@ public class MainActivity extends Activity {
             }
         } );
 
+        user_out.setOnClickListener ( new View.OnClickListener ( ) {
+            @Override
+            public void onClick (View view) {
+                Toast.makeText ( MainActivity.this, "退出成功", Toast.LENGTH_SHORT ).show ( );
+                LCUser.logOut ();
+                name=null;
+                username.setText ( "登录" );
+            }
+
+        } );
 
         login.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public void onClick (View view) {
                Intent intent=new Intent (MainActivity.this,LoginActivity1.class);
-                startActivity ( intent);
-                if (author!=null){
-                    author = LCUser.getCurrentUser();
-                    name =author.getUsername ();
-                }
+                startActivityForResult ( intent,1);
             }
         } );
 
@@ -170,11 +178,9 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick (View view) {
+                if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
-                if (author!=null){
-                    author = LCUser.getCurrentUser();
-                    name =author.getUsername ();
-                }
+                A=true;
                 int co;
                 delet();
                 delay ( 100 );
@@ -190,25 +196,27 @@ public class MainActivity extends Activity {
                     todo.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
-
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
-
+                           if (A) {Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
                             onResume();
                         }
 
                         @Override
                         public void onError (Throwable e) {
+                            if (A){Toast.makeText ( MainActivity.this, "上传失败", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
                         }
 
                         @Override
                         public void onComplete ( ) {
 
+
                         }
                     } );
                 }
-
                 cursor=dbReader.query ( NotesDB.TABLE_NAME,null,null,null,null,null,null );
                 String classno=null;
                 A=true;
@@ -217,13 +225,11 @@ public class MainActivity extends Activity {
                     if (co > -1) text = cursor.getString (co);
                     co = cursor.getColumnIndex ( "class" );
                     if (co > -1) classno = cursor.getString (co);
-
                     LCObject note=new LCObject ( "NOTE" );
                     note.put ( "CONTENT",text);
                     note.put ( "user",name );
                     note.put ( "CLASS",classno );
                     //Log.d ( "text1111",text);
-
                     note.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
@@ -231,7 +237,7 @@ public class MainActivity extends Activity {
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
-                            if (A){ Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );}
+                            if (A){ Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
                                 A=false;
                         }
 
@@ -246,21 +252,17 @@ public class MainActivity extends Activity {
                         }
                     } );
                     A=false;
+                    Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );
                 }
                 wait.setVisibility ( View.INVISIBLE );
-                onResume();
-            }
-        } );
-
+                onResume();}} );
         getlc.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public void onClick (View view) {
+                if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
-                if (author!=null){
-                    author = LCUser.getCurrentUser();
-                    name =author.getUsername ();
-                }
-
+                   // author = LCUser.getCurrentUser();
+                   // name =author.getUsername ();
                 dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
                 onResume();
                 LCQuery<LCObject> query = new LCQuery<> ("TODO");
@@ -275,11 +277,11 @@ public class MainActivity extends Activity {
                                 ContentValues cv=new ContentValues ( );
                                 cv.put (BeDoneDB.CONTENT,students.get(i).getString ( "TEXT" ));
                                 cv.put ( BeDoneDB.TIME,getTime () );
-                                long insert = dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
+                                 dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
                                 onResume();
                             }
                         }
-
+                        Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );
                     }
                     public void onError(Throwable throwable) {
                         Toast.makeText ( MainActivity.this, throwable.toString (), Toast.LENGTH_SHORT ).show ( );
@@ -305,10 +307,9 @@ public class MainActivity extends Activity {
                                 onResume();
                             }
                         }
-
                     }
                     public void onError(Throwable throwable) {
-                        Toast.makeText ( MainActivity.this, throwable.toString (), Toast.LENGTH_SHORT ).show ( );
+                        Toast.makeText ( MainActivity.this, "同步失败", Toast.LENGTH_SHORT ).show ( );
                     }
                     public void onComplete() {}
                 });
@@ -342,20 +343,24 @@ public class MainActivity extends Activity {
         find_list.setVisibility ( View.INVISIBLE );
         find_in=(Button) findViewById ( R.id.find_in );
         add=(FloatingActionButton)findViewById ( R.id.main_add );
+        user_out=(Button)findViewById ( R.id.user_out );
         find_text=(EditText)findViewById ( R.id.main_find0);
         getlc=(Button)findViewById ( R.id.get_LC );
         putlc=(Button)findViewById ( R.id.put_LC );
+        username=(TextView)findViewById ( R.id.textView2 );
         wait=(ProgressBar)findViewById ( R.id.main_wait );
         wait.setVisibility ( View.INVISIBLE );
         set_findtext="";
         ViewOP ="0";
-        if (author!=null){
-            author = LCUser.getCurrentUser();
-            name =author.getUsername ();
+        SeeTime=false;
+        try {
+            author=LCUser.getCurrentUser ();
+            name= author.getUsername ( );
+            username.setText ( name );
+        }catch (Exception e){
+
 
         }
-
-        SeeTime=false;
     }
 
     public void selectDB(){
@@ -440,7 +445,6 @@ public class MainActivity extends Activity {
 
                             @Override
                             public void onNext(LCNull response) {
-
                             }
 
                             @Override
@@ -458,8 +462,18 @@ public class MainActivity extends Activity {
             public void onError(Throwable throwable) {
                 Toast.makeText ( MainActivity.this, throwable.toString (), Toast.LENGTH_SHORT ).show ( );
             }
-            public void onComplete() {}
+            public void onComplete() {  }
         });
+    }
+    @Override
+    protected void  onActivityResult(int requestCode,int resultCode,Intent data){
+        if (resultCode==1){
+            author=LCUser.getCurrentUser ();
+            name= author.getUsername ( );
+            Log.d ("user" ,author.getUsername ().toString () );
+            username.setText ( name );
+            init ();
+        }
 
 
     }

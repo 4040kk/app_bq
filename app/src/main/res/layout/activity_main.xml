@@ -47,7 +47,8 @@
             app:layout_constraintHorizontal_bias="0.94"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.986" />
+            app:layout_constraintVertical_bias="0.986"
+            />
 
         <Button
             android:id="@+id/bedonemain_main"
@@ -81,6 +82,7 @@
             android:layout_width="53dp"
             android:layout_height="51dp"
             android:text="上传"
+            android:background="@drawable/add_user"
             app:layout_constraintBottom_toTopOf="@+id/main_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.078"
@@ -101,6 +103,7 @@
             android:id="@+id/get_LC"
             android:layout_width="53dp"
             android:layout_height="51dp"
+            android:background="@drawable/add_user"
             android:text="同步"
             app:layout_constraintBottom_toTopOf="@+id/main_list"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,47 +120,95 @@
         android:layout_gravity="left"
         android:background="@drawable/login_button">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/LIn1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/Login"
+                        android:layout_width="71dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="65dp"
+                        android:layout_marginEnd="64dp"
+                        android:background="@drawable/rio"
+                        android:hint="登录"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:textSize="14sp"
+                        app:layout_constraintTop_toBottomOf="@id/Login"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintVertical_bias="0.5"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ListView
+                    android:id="@+id/main_todo_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="510dp"
+                    />
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="right"
+                tools:layout_editor_absoluteX="-16dp"
+                tools:layout_editor_absoluteY="672dp"
+                app:layout_constraintTop_toBottomOf="@+id/LIn1"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
 
                 <Button
-                    android:id="@+id/Login"
-                    android:layout_width="71dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="65dp"
-                    android:layout_marginEnd="64dp"
+                    android:id="@+id/user_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="退出"
                     android:background="@drawable/rio"
-                    android:text="登录"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5" />
+                    android:textSize="16sp" />
 
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ListView
-                android:id="@+id/main_todo_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-
-        </LinearLayout>
 
 
     </com.google.android.material.navigation.NavigationView>
@@ -167,7 +218,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:background="@drawable/login_button">
-
 
         <LinearLayout
             android:layout_width="match_parent"

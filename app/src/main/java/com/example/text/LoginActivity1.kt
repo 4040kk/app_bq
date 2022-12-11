@@ -49,12 +49,13 @@ class LoginActivity1 : AppCompatActivity(),View.OnClickListener {
                 val rememberUser: CheckBox =findViewById(R.id.rememberUser)
                 val prefs=getPreferences(MODE_PRIVATE)
                 val editor=prefs.edit()
+                val author: LCUser? = null
                 loginIng.visibility=View.VISIBLE;
                 LCUser.logIn(inputAccount,inputPassword).subscribe(object : Observer<LCUser> {
                     override fun onComplete() {}
 
                     override fun onError(e: Throwable) {
-                        Toast.makeText(content,"${e.message}",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(content,"登录失败",Toast.LENGTH_SHORT).show();
                         loginIng.visibility=View.INVISIBLE;
                     }
 
@@ -72,14 +73,15 @@ class LoginActivity1 : AppCompatActivity(),View.OnClickListener {
                         }
                         editor.apply()
                         val intent = Intent(content, MainActivity::class.java)
-                        startActivity(intent)
+                        setResult(1, intent)
+                        finish()
                     }
 
                     override fun onSubscribe(d: Disposable) {
                     }
 
-
                 })
+                loginIng.visibility=View.INVISIBLE;
 
             }
         }
@@ -117,6 +119,7 @@ class LoginActivity1 : AppCompatActivity(),View.OnClickListener {
         else{
             false
         }
+
     }
 
 
