@@ -45,6 +45,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                     Thread{
                         sendmail.SendEmai.sendMail(inputEmail,emailcode.toString())}.start()
                     Toast.makeText(this, "发送成功", Toast.LENGTH_SHORT).show()
+                    Wait.visibility=View.INVISIBLE;
                 } else {
                     Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
                 }
@@ -142,6 +143,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                 else{
                     Toast.makeText(this,"验证码错误", Toast.LENGTH_SHORT).show()
                 }
+                Wait.visibility=View.INVISIBLE;
             }
         }
     }

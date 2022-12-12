@@ -474,7 +474,5 @@ public class MainActivity extends Activity {
             username.setText ( name );
             init ();
         }
-
-
     }
 }
