@@ -12,6 +12,7 @@ import cn.leancloud.LCUser
 import com.example.supernotes.utils.sendmail
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import java.lang.Math.E
 import kotlin.random.Random
 
 
@@ -48,6 +49,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
                     Wait.visibility=View.INVISIBLE;
                 } else {
                     Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()
+                    Wait.visibility=View.INVISIBLE;
                 }
             }
         }
@@ -55,6 +57,7 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
             R.id.item1 -> {
                 val intent = Intent(this, items::class.java)
                 startActivity(intent)
+                Wait.visibility=View.INVISIBLE;
             }
         }
         when (v?.id) {
@@ -105,14 +108,13 @@ open class RegisterActivity0 : AppCompatActivity(), View.OnClickListener {
 
                                 override fun onError(e: Throwable) {
                                     Toast.makeText(content,"${e.message}",Toast.LENGTH_SHORT).show();
-                                    Wait.visibility=View.INVISIBLE;
+                                  E;  Wait.visibility=View.INVISIBLE;
                                 }
 
                                 override fun onComplete() {
                                 }
-
-
                             })
+                            Wait.visibility=View.INVISIBLE;
                         }
                     }else {
                         Toast.makeText(this, "请输入正确的邮箱地址", Toast.LENGTH_SHORT).show()

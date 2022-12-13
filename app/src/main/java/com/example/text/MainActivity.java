@@ -2,9 +2,12 @@ package com.example.text;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,6 +58,7 @@ public class MainActivity extends Activity {
     private LCUser author;
     private String name ;
     private ProgressBar wait;
+    private Context context=this;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
 
@@ -178,6 +182,10 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick (View view) {
+                if ( !checkConnectNetwork(context)){
+                    Toast.makeText ( context, "网络未链接", Toast.LENGTH_SHORT ).show ( );
+                    return;
+                }
                 if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
                 A=true;
@@ -196,11 +204,12 @@ public class MainActivity extends Activity {
                     todo.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
+                            if (A) {Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
-                           if (A) {Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
-                            A=false;
+
                             onResume();
                         }
 
@@ -237,13 +246,13 @@ public class MainActivity extends Activity {
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
-                            if (A){ Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
-                                A=false;
                         }
 
                         @Override
                         public void onError (Throwable e) {
-                            Toast.makeText ( MainActivity.this, e.toString (), Toast.LENGTH_SHORT ).show ( );
+                            if (A){Toast.makeText ( MainActivity.this, "上传失败", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
+                           // Toast.makeText ( MainActivity.this, e.toString (), Toast.LENGTH_SHORT ).show ( );
                         }
 
                         @Override
@@ -252,24 +261,25 @@ public class MainActivity extends Activity {
                         }
                     } );
                     A=false;
-                    Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );
                 }
                 wait.setVisibility ( View.INVISIBLE );
                 onResume();}} );
         getlc.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public void onClick (View view) {
+                if ( !checkConnectNetwork(context)){
+                    Toast.makeText ( context, "网络未链接", Toast.LENGTH_SHORT ).show ( );
+                    return;
+                }
                 if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
-                   // author = LCUser.getCurrentUser();
-                   // name =author.getUsername ();
-                dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
                 onResume();
                 LCQuery<LCObject> query = new LCQuery<> ("TODO");
                 query.whereEqualTo("user", name);
                 query.findInBackground().subscribe(new Observer<List<LCObject>>() {
                     public void onSubscribe(Disposable disposable) {}
                     public void onNext(List<LCObject> students) {
+                        dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
                         for (int i = 0; i < students.size(); i++) {
                             System.out.println(students.get(i) );
                             if (students.get(i).getString ( "TEXT" )!=null){
@@ -281,6 +291,7 @@ public class MainActivity extends Activity {
                                 onResume();
                             }
                         }
+
                         Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );
                     }
                     public void onError(Throwable throwable) {
@@ -289,12 +300,12 @@ public class MainActivity extends Activity {
                     public void onComplete() {}
                 });
 
-                dbWriter_note.delete ( NotesDB.TABLE_NAME,null,null );
                 LCQuery<LCObject> query1 = new LCQuery<> ("NOTE");
                 query1.whereEqualTo("user", name);
                 query1.findInBackground().subscribe(new Observer<List<LCObject>>() {
                     public void onSubscribe(Disposable disposable) {}
                     public void onNext(List<LCObject> students) {
+                        dbWriter_note.delete ( NotesDB.TABLE_NAME,null,null );
                         for (int i = 0; i < students.size(); i++) {
                             if (students.get(i).getString ( "CLASS" )!=null){
                                 ContentValues cv=new ContentValues ( );
@@ -313,11 +324,9 @@ public class MainActivity extends Activity {
                     }
                     public void onComplete() {}
                 });
+
                 wait.setVisibility ( View.INVISIBLE );
             }} );
-
-
-
     }
 
     private String getTime(){
@@ -358,8 +367,6 @@ public class MainActivity extends Activity {
             name= author.getUsername ( );
             username.setText ( name );
         }catch (Exception e){
-
-
         }
     }
 
@@ -474,5 +481,16 @@ public class MainActivity extends Activity {
             username.setText ( name );
             init ();
         }
+    }
+
+
+    private boolean checkConnectNetwork(Context context) {
+
+        ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = conn.getActiveNetworkInfo();
+        if (net != null && net.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }
