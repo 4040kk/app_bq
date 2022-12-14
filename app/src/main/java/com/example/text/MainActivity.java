@@ -1,6 +1,9 @@
 package com.example.text;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,7 +41,7 @@ import cn.leancloud.types.LCNull;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity  {
 
     private Boolean A=true;
     private Button login,getlc,putlc,bedone,find_in,user_out;
@@ -59,6 +64,8 @@ public class MainActivity extends Activity {
     private String name ;
     private ProgressBar wait;
     private Context context=this;
+    private NotificationManager manager;
+    private String timeday;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
 
@@ -327,6 +334,8 @@ public class MainActivity extends Activity {
 
                 wait.setVisibility ( View.INVISIBLE );
             }} );
+
+
     }
 
     private String getTime(){
@@ -359,15 +368,20 @@ public class MainActivity extends Activity {
         username=(TextView)findViewById ( R.id.textView2 );
         wait=(ProgressBar)findViewById ( R.id.main_wait );
         wait.setVisibility ( View.INVISIBLE );
+        manager=(NotificationManager)getSystemService ( NOTIFICATION_SERVICE );
         set_findtext="";
         ViewOP ="0";
         SeeTime=false;
+        SimpleDateFormat format_day=new SimpleDateFormat ("MM.dd");
+        Date date_day=new Date (  );
+        timeday =format_day.format ( date_day );
         try {
             author=LCUser.getCurrentUser ();
             name= author.getUsername ( );
             username.setText ( name );
         }catch (Exception e){
         }
+        alarm_clock ();
     }
 
     public void selectDB(){
@@ -493,4 +507,56 @@ public class MainActivity extends Activity {
         }
         return false;
     }
+
+    private void alarm_clock(){
+
+        Intent intent = new Intent(context, MainActivity.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        }else {
+            context.startService(intent);
+        }
+        cursor_todo=dbReader_todo.query ( BeDoneDB.TABLE_NAME,null, null,null,null,null,null  );
+        while (cursor_todo.moveToNext ()){
+            String text1=null;
+            String content=null;
+           int coo = cursor_todo.getColumnIndex ( "time" );
+            text1 = cursor_todo.getString (coo);
+            coo=cursor_todo.getColumnIndex ( "content" );
+            content=cursor_todo.getString ( coo );
+
+
+                if(text1.equals ( timeday )){
+
+                    Notification notification;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        String id = coo+"MyService";
+                        String description = "my-service";
+                        int importance = NotificationManager.IMPORTANCE_LOW;
+                        NotificationChannel channel = new NotificationChannel(id, description, importance);
+                        manager.createNotificationChannel(channel);
+                        notification = new Notification.Builder(this, id)
+                                .setCategory(Notification.CATEGORY_MESSAGE)
+                                .setSmallIcon( R.drawable.sendme )
+                                .setContentTitle ( "今天有项待办哦~" )
+                                .setContentText ( content )
+                                .setAutoCancel(true)
+                                .build();
+                        manager.notify(1, notification);
+                    } else {
+                        notification = new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.fufu)
+                                .build();
+                        manager.notify(1, notification);
+                    }
+
+                    startForeground(888, notification);
+                }
+        }
+    }
+
+    private void startForeground (int i, Notification notification) {
+    }
+
+
 }

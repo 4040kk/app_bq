@@ -9,34 +9,34 @@
 
     <Button
         android:id="@+id/backTodo"
-        android:layout_width="96dp"
-        android:layout_height="99dp"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:alpha="100"
         android:background="@android:drawable/ic_menu_revert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_todo"
-        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.974" />
 
     <Button
         android:id="@+id/add_todo"
-        android:layout_width="96dp"
-        android:layout_height="99dp"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:alpha="100"
         android:background="@android:drawable/ic_menu_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.911"
+        app:layout_constraintHorizontal_bias="0.916"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.974" />
 
     <EditText
         android:id="@+id/text_todo"
-        android:layout_width="350dp"
-        android:layout_height="572dp"
+        android:layout_width="348dp"
+        android:layout_height="570dp"
         android:fontFamily="@font/gogo"
         android:gravity="left"
         android:hint="请输入内容"
@@ -45,10 +45,71 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.416" />
+
+    <Switch
+        android:id="@+id/Alarm_sw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置提醒"
+        android:textColor="#171515"
+        app:layout_constraintBottom_toTopOf="@+id/text_todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/Alarm_m"
+        android:layout_width="70dp"
+        android:layout_height="33dp"
+        android:backgroundTint="#A8201D1D"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="月份"
+        android:inputType="time"
+        android:textColorHint="#151414"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_todo"
+        app:layout_constraintStart_toStartOf="@+id/text_todo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/Alarm_d"
+        android:layout_width="70dp"
+        android:layout_height="33dp"
+        android:backgroundTint="#A8201D1D"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="日期"
+        android:inputType="time"
+        android:textColorHint="#151414"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_todo"
+        app:layout_constraintEnd_toStartOf="@+id/Alarm_sw"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Alarm_m"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/Alarm_T"
+        android:layout_width="141dp"
+        android:layout_height="23dp"
+        android:gravity="center"
+        android:text="设置提醒时间"
+        android:textColor="#131212"
+        app:layout_constraintBottom_toTopOf="@+id/Alarm_d"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Alarm_m"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
