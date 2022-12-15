@@ -106,14 +106,7 @@ public class todoet extends AppCompatActivity {
         long insert = dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
         //Toast.makeText ( todoet.this,insert+"",Toast.LENGTH_SHORT ).show ();
     }
-//    private void getTime(){
-//        try {
-//            month=Integer.parseInt(Alarm_m.getText ().toString ());
-//            day=Integer.parseInt(Alarm_d.getText ().toString ());
-//        }catch (Exception e){
-//            //Toast.makeText ( this, "输入日期不是有效数字", Toast.LENGTH_SHORT ).show ( );
-//        }
-//    }
+
     @Override
     protected void onResume(){
         super.onResume ();

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -66,6 +68,7 @@ public class MainActivity extends Activity  {
     private Context context=this;
     private NotificationManager manager;
     private String timeday;
+    private SwipeRefreshLayout refresh;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
 
@@ -195,6 +198,7 @@ public class MainActivity extends Activity  {
                 }
                 if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
+
                 A=true;
                 int co;
                 delet();
@@ -202,6 +206,7 @@ public class MainActivity extends Activity  {
                 String text="null";
                 cursor_todo=dbReader_todo.query ( BeDoneDB.TABLE_NAME,null, null,null,null,null,null  );
                 while (cursor_todo.moveToNext ()){
+                    delay ( 10 );
                     co = cursor_todo.getColumnIndex ( "content" );
                     if (co > -1) text = cursor_todo.getString (co);
                     LCObject todo=new LCObject ( "TODO" );
@@ -211,13 +216,11 @@ public class MainActivity extends Activity  {
                     todo.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
-                            if (A) {Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
-                            A=false;
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
-
-                            onResume();
+                            if (A){Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
                         }
 
                         @Override
@@ -228,8 +231,6 @@ public class MainActivity extends Activity  {
 
                         @Override
                         public void onComplete ( ) {
-
-
                         }
                     } );
                 }
@@ -237,6 +238,7 @@ public class MainActivity extends Activity  {
                 String classno=null;
                 A=true;
                 while (cursor.moveToNext ()){
+                    delay ( 10 );
                     co = cursor.getColumnIndex ( "content" );
                     if (co > -1) text = cursor.getString (co);
                     co = cursor.getColumnIndex ( "class" );
@@ -249,10 +251,21 @@ public class MainActivity extends Activity  {
                     note.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
-
+                            if (A){
+                                wait.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );
+                                        wait.setVisibility ( View.INVISIBLE );
+                                    }
+                                },1000);
+                                }
+                            A=false;
                         }
                         @Override
                         public void onNext (LCObject lcObject) {
+                            if (A){Toast.makeText ( MainActivity.this, "上传成功", Toast.LENGTH_SHORT ).show ( );}
+                            A=false;
                         }
 
                         @Override
@@ -269,11 +282,11 @@ public class MainActivity extends Activity  {
                     } );
                     A=false;
                 }
-                wait.setVisibility ( View.INVISIBLE );
                 onResume();}} );
-        getlc.setOnClickListener ( new View.OnClickListener ( ) {
+
+        refresh.setOnRefreshListener ( new SwipeRefreshLayout.OnRefreshListener ( ) {
             @Override
-            public void onClick (View view) {
+            public void onRefresh ( ) {
                 if ( !checkConnectNetwork(context)){
                     Toast.makeText ( context, "网络未链接", Toast.LENGTH_SHORT ).show ( );
                     return;
@@ -290,11 +303,11 @@ public class MainActivity extends Activity  {
                         for (int i = 0; i < students.size(); i++) {
                             System.out.println(students.get(i) );
                             if (students.get(i).getString ( "TEXT" )!=null){
-                            // Toast.makeText ( MainActivity.this,students.get(i).getString ( "TEXT" ) , Toast.LENGTH_SHORT ).show ( );
+                                // Toast.makeText ( MainActivity.this,students.get(i).getString ( "TEXT" ) , Toast.LENGTH_SHORT ).show ( );
                                 ContentValues cv=new ContentValues ( );
                                 cv.put (BeDoneDB.CONTENT,students.get(i).getString ( "TEXT" ));
                                 cv.put ( BeDoneDB.TIME,getTime () );
-                                 dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
+                                dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
                                 onResume();
                             }
                         }
@@ -306,7 +319,6 @@ public class MainActivity extends Activity  {
                     }
                     public void onComplete() {}
                 });
-
                 LCQuery<LCObject> query1 = new LCQuery<> ("NOTE");
                 query1.whereEqualTo("user", name);
                 query1.findInBackground().subscribe(new Observer<List<LCObject>>() {
@@ -331,9 +343,15 @@ public class MainActivity extends Activity  {
                     }
                     public void onComplete() {}
                 });
-
                 wait.setVisibility ( View.INVISIBLE );
-            }} );
+                refresh.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh.setRefreshing(false);
+                    }
+                },1000);
+            }
+        } );
 
 
     }
@@ -363,7 +381,6 @@ public class MainActivity extends Activity  {
         add=(FloatingActionButton)findViewById ( R.id.main_add );
         user_out=(Button)findViewById ( R.id.user_out );
         find_text=(EditText)findViewById ( R.id.main_find0);
-        getlc=(Button)findViewById ( R.id.get_LC );
         putlc=(Button)findViewById ( R.id.put_LC );
         username=(TextView)findViewById ( R.id.textView2 );
         wait=(ProgressBar)findViewById ( R.id.main_wait );
@@ -381,6 +398,11 @@ public class MainActivity extends Activity  {
             username.setText ( name );
         }catch (Exception e){
         }
+
+       refresh = findViewById(R.id.refresh);
+       refresh.setColorSchemeColors( Color.parseColor("#ff0000"),Color.parseColor("#00ff00"));
+
+
         alarm_clock ();
     }
 
@@ -400,6 +422,7 @@ public class MainActivity extends Activity  {
     @Override
     protected void onResume(){
         super.onResume ();
+        alarm_clock();
         selectDB ();
     }
     private void delay(int ms){
@@ -509,13 +532,15 @@ public class MainActivity extends Activity  {
     }
 
     private void alarm_clock(){
-
+        //////////////////////////前台服务权限//////////////////////////////
         Intent intent = new Intent(context, MainActivity.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         }else {
             context.startService(intent);
         }
+
+
         cursor_todo=dbReader_todo.query ( BeDoneDB.TABLE_NAME,null, null,null,null,null,null  );
         while (cursor_todo.moveToNext ()){
             String text1=null;
@@ -544,6 +569,7 @@ public class MainActivity extends Activity  {
                                 .build();
                         manager.notify(1, notification);
                     } else {
+                        //4.0以下
                         notification = new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.fufu)
                                 .build();
