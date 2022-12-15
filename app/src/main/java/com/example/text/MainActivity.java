@@ -293,7 +293,6 @@ public class MainActivity extends Activity  {
                 }
                 if (name==null){Toast.makeText ( MainActivity.this, "用户未登录", Toast.LENGTH_SHORT ).show ( );return;}
                 wait.setVisibility ( View.VISIBLE );
-                onResume();
                 LCQuery<LCObject> query = new LCQuery<> ("TODO");
                 query.whereEqualTo("user", name);
                 query.findInBackground().subscribe(new Observer<List<LCObject>>() {
@@ -350,6 +349,7 @@ public class MainActivity extends Activity  {
                         refresh.setRefreshing(false);
                     }
                 },1000);
+                onResume();
             }
         } );
 
@@ -357,7 +357,7 @@ public class MainActivity extends Activity  {
     }
 
     private String getTime(){
-        SimpleDateFormat format=new SimpleDateFormat ("yy.MM.dd HH:mm");
+        SimpleDateFormat format=new SimpleDateFormat ("MM.dd HH:mm");
         Date date =new Date (  );
         String str =format.format ( date );
         return str;
@@ -400,9 +400,7 @@ public class MainActivity extends Activity  {
         }
 
        refresh = findViewById(R.id.refresh);
-       refresh.setColorSchemeColors( Color.parseColor("#ff0000"),Color.parseColor("#00ff00"));
-
-
+       refresh.setColorSchemeColors( Color.parseColor("#B981FD"),Color.parseColor("#00ff00"));
         alarm_clock ();
     }
 
@@ -549,10 +547,7 @@ public class MainActivity extends Activity  {
             text1 = cursor_todo.getString (coo);
             coo=cursor_todo.getColumnIndex ( "content" );
             content=cursor_todo.getString ( coo );
-
-
                 if(text1.equals ( timeday )){
-
                     Notification notification;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         String id = coo+"MyService";
@@ -562,7 +557,7 @@ public class MainActivity extends Activity  {
                         manager.createNotificationChannel(channel);
                         notification = new Notification.Builder(this, id)
                                 .setCategory(Notification.CATEGORY_MESSAGE)
-                                .setSmallIcon( R.drawable.sendme )
+                                .setSmallIcon( R.drawable.register_p2 )
                                 .setContentTitle ( "今天有项待办哦~" )
                                 .setContentText ( content )
                                 .setAutoCancel(true)
@@ -583,6 +578,4 @@ public class MainActivity extends Activity  {
 
     private void startForeground (int i, Notification notification) {
     }
-
-
 }
