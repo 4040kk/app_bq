@@ -205,14 +205,16 @@ public class MainActivity extends Activity  {
                 delay ( 100 );
                 String text="null";
                 cursor_todo=dbReader_todo.query ( BeDoneDB.TABLE_NAME,null, null,null,null,null,null  );
+                LCObject todo=new LCObject ( "TODO" );
                 while (cursor_todo.moveToNext ()){
                     delay ( 10 );
                     co = cursor_todo.getColumnIndex ( "content" );
                     if (co > -1) text = cursor_todo.getString (co);
-                    LCObject todo=new LCObject ( "TODO" );
                     todo.put ( "TEXT",text);
+                    co = cursor_todo.getColumnIndex ( "time" );
+                    text = cursor_todo.getString (co);
+                    todo.put ( "TIME_alarm",text);
                     todo.put ( "user",name );
-                    Log.d ( "text1111",text);
                     todo.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
                         public void onSubscribe (Disposable d) {
@@ -297,20 +299,24 @@ public class MainActivity extends Activity  {
                 query.whereEqualTo("user", name);
                 query.findInBackground().subscribe(new Observer<List<LCObject>>() {
                     public void onSubscribe(Disposable disposable) {}
+                    //////////////////////////////////获取 list<> 内容//////////////////////////////////////
                     public void onNext(List<LCObject> students) {
+
                         dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
                         for (int i = 0; i < students.size(); i++) {
+                            ContentValues cv=new ContentValues ( );
                             System.out.println(students.get(i) );
                             if (students.get(i).getString ( "TEXT" )!=null){
                                 // Toast.makeText ( MainActivity.this,students.get(i).getString ( "TEXT" ) , Toast.LENGTH_SHORT ).show ( );
-                                ContentValues cv=new ContentValues ( );
                                 cv.put (BeDoneDB.CONTENT,students.get(i).getString ( "TEXT" ));
-                                cv.put ( BeDoneDB.TIME,getTime () );
-                                dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
-                                onResume();
                             }
+                            if (students.get(i).getString ( "TIME_alarm" )!=null){
+                               //Toast.makeText ( MainActivity.this,students.get(i).getString ( "TIME_alarm" ) , Toast.LENGTH_SHORT ).show ( );
+                               cv.put (BeDoneDB.TIME,students.get(i).getString ( "TIME_alarm" ));
+                            }
+                            dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
                         }
-
+                        onResume ();
                         Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );
                     }
                     public void onError(Throwable throwable) {
@@ -333,7 +339,6 @@ public class MainActivity extends Activity  {
                                 cv.put ( NotesDB.PATH,students.get ( i ).getString ( "PATH" ) );
                                 cv.put ( NotesDB.TIME,getTime () );
                                 dbWriter_note.insert ( NotesDB.TABLE_NAME, null, cv );
-                                onResume();
                             }
                         }
                     }
@@ -537,8 +542,7 @@ public class MainActivity extends Activity  {
         }else {
             context.startService(intent);
         }
-
-
+        int i=1;
         cursor_todo=dbReader_todo.query ( BeDoneDB.TABLE_NAME,null, null,null,null,null,null  );
         while (cursor_todo.moveToNext ()){
             String text1=null;
@@ -550,8 +554,8 @@ public class MainActivity extends Activity  {
                 if(text1.equals ( timeday )){
                     Notification notification;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        String id = coo+"MyService";
-                        String description = "my-service";
+                        String id = i+"MyService";
+                        String description = i+"my-service";
                         int importance = NotificationManager.IMPORTANCE_LOW;
                         NotificationChannel channel = new NotificationChannel(id, description, importance);
                         manager.createNotificationChannel(channel);
@@ -562,7 +566,8 @@ public class MainActivity extends Activity  {
                                 .setContentText ( content )
                                 .setAutoCancel(true)
                                 .build();
-                        manager.notify(1, notification);
+                        manager.notify(i, notification);
+                        i++;
                     } else {
                         //4.0以下
                         notification = new NotificationCompat.Builder(this)
