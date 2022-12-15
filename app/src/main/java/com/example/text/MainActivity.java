@@ -316,7 +316,6 @@ public class MainActivity extends Activity  {
                             }
                             dbWriter.insert ( BeDoneDB.TABLE_NAME, null, cv );
                         }
-                        onResume ();
                         Toast.makeText ( MainActivity.this, "同步成功", Toast.LENGTH_SHORT ).show ( );
                     }
                     public void onError(Throwable throwable) {
@@ -351,10 +350,10 @@ public class MainActivity extends Activity  {
                 refresh.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        onResume();
                         refresh.setRefreshing(false);
                     }
                 },1000);
-                onResume();
             }
         } );
 

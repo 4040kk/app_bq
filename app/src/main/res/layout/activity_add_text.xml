@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/backb"
+    android:background="@drawable/back4"
     tools:context=".AddText">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:id="@+id/et_class"
         android:layout_width="279dp"
         android:layout_height="61dp"
-        android:background="@drawable/riob"
+        android:background="@drawable/account_text"
         android:gravity="center"
         android:hint="标题"
         android:minLines="1"
