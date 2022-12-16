@@ -235,10 +235,11 @@ public class MainActivity extends Activity  {
                         public void onComplete ( ) {
                         }
                     } );
-                }String imp;
+                }
+                String imp;
                 cursor=dbReader.query ( NotesDB.TABLE_NAME,null,null,null,null,null,null );
                 String classno=null;
-
+                String time="00.00";
                 A=true;
                 while (cursor.moveToNext ()){
                     delay ( 10 );
@@ -248,11 +249,14 @@ public class MainActivity extends Activity  {
                     if (co > -1) classno = cursor.getString (co);
                     co = cursor.getColumnIndex ( "importent" );
                     imp = cursor.getString (co);
+                    co = cursor.getColumnIndex ( "time" );
+                    time = cursor.getString (co);
                     LCObject note=new LCObject ( "NOTE" );
                     note.put ( "CONTENT",text);
                     note.put ( "user",name );
                     note.put ( "CLASS",classno );
                     note.put ( "IMPORTENT",imp );
+                    note.put ( "TIME",time );
                     //Log.d ( "text1111",text);
                     note.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
@@ -305,8 +309,8 @@ public class MainActivity extends Activity  {
                     public void onSubscribe(Disposable disposable) {}
                     //////////////////////////////////获取 list<> 内容//////////////////////////////////////
                     public void onNext(List<LCObject> students) {
-
                         dbWriter.delete ( BeDoneDB.TABLE_NAME,null,null );
+                        delay ( 100 );
                         for (int i = 0; i < students.size(); i++) {
                             ContentValues cv=new ContentValues ( );
                             System.out.println(students.get(i) );
@@ -340,7 +344,7 @@ public class MainActivity extends Activity  {
                                 cv.put (NotesDB.CONTENT,students.get(i).getString ( "CONTENT" ));
                                 cv.put (NotesDB.IMPORTENT,students.get(i).getString ( "IMPORTENT" ));
                                 cv.put ( NotesDB.PATH,students.get ( i ).getString ( "PATH" ) );
-                                cv.put ( NotesDB.TIME,getTime () );
+                                cv.put ( NotesDB.TIME,students.get ( i ).getString ( "TIME" ) );
                                 dbWriter_note.insert ( NotesDB.TABLE_NAME, null, cv );
                             }
                         }
