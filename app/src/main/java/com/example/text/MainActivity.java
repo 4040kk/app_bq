@@ -446,8 +446,15 @@ public class MainActivity extends Activity  {
 
 
     public void delet(){
+        try {
+            author=LCUser.getCurrentUser ();
+            name= author.getUsername ( );
+            username.setText ( name );
+        }catch (Exception e){
+        }
         LCQuery<LCObject> query = new LCQuery<> ("TODO");
         query.whereEqualTo("user", name);
+
         query.findInBackground().subscribe(new Observer<List<LCObject>>() {
             public void onSubscribe(Disposable disposable) {}
             public void onNext(List<LCObject> students) {
@@ -458,7 +465,7 @@ public class MainActivity extends Activity  {
                        // Toast.makeText ( MainActivity.this, students.get(i).getString ( "objectId" ), Toast.LENGTH_SHORT ).show ( );
                         todo.deleteInBackground().subscribe(new Observer<LCNull>() {
                             @Override
-                            public void onSubscribe(@NonNull Disposable d) {}
+                            public void onSubscribe(@NonNull Disposable d) { delay ( 50 );}
 
                             @Override
                             public void onNext(LCNull response) {
@@ -467,7 +474,7 @@ public class MainActivity extends Activity  {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                System.out.println("failed to delete a todo: " + e.getMessage());
+                                System.out.println("PUT:____failed to delete a todo: " + e.getMessage());
                             }
 
                             @Override
@@ -475,6 +482,7 @@ public class MainActivity extends Activity  {
                         });
                     }
                 }
+                delay ( 50 );
 
             }
             public void onError(Throwable throwable) {
@@ -482,7 +490,7 @@ public class MainActivity extends Activity  {
             }
             public void onComplete() {}
         });
-
+        delay ( 50 );
         LCQuery<LCObject> query1 = new LCQuery<> ("NOTE");
         query1.whereEqualTo("user", name);
         query1.findInBackground().subscribe(new Observer<List<LCObject>>() {
@@ -503,13 +511,14 @@ public class MainActivity extends Activity  {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                System.out.println("failed to delete a todo: " + e.getMessage());
+                                System.out.println("PUT:____failed to delete a todo: " + e.getMessage());
                             }
 
                             @Override
                             public void onComplete() {}
                         });
                     }
+                    delay ( 50 );
                 }
 
             }
