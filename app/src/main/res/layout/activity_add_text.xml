@@ -19,7 +19,7 @@
         android:gravity="center"
         android:hint="标题"
         android:minLines="1"
-        android:textColor="#458EC6"
+        android:textColor="#AFAEB3"
         android:textColorHint="#458EC6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,9 +38,10 @@
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et" />
+        app:layout_constraintTop_toBottomOf="@+id/et"
+        app:layout_constraintVertical_bias="0.994" />
 
     <Button
         android:id="@+id/add_input"
@@ -50,22 +51,24 @@
         android:foreground="@android:drawable/ic_menu_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.845"
+        app:layout_constraintHorizontal_bias="0.927"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et" />
+        app:layout_constraintTop_toBottomOf="@+id/et"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/et"
         android:layout_width="323dp"
-        android:layout_height="361dp"
+        android:layout_height="wrap_content"
         android:gravity="top"
         android:hint="开始添加笔记吧!"
-        android:textColor="#458EC6"
+        android:textColor="#E2EAF1"
         android:textColorHint="#458EC6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_img" />
+        app:layout_constraintTop_toBottomOf="@+id/add_img"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/add_path"
@@ -89,7 +92,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_class"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/add_imgde"

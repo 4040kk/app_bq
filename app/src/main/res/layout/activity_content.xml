@@ -82,7 +82,7 @@
     <EditText
         android:id="@+id/C_et"
         android:layout_width="match_parent"
-        android:layout_height="624dp"
+        android:layout_height="wrap_content"
         android:gravity="top|left"
         android:hint="添加笔记!"
         android:textColor="@color/white" />

@@ -235,9 +235,10 @@ public class MainActivity extends Activity  {
                         public void onComplete ( ) {
                         }
                     } );
-                }
+                }String imp;
                 cursor=dbReader.query ( NotesDB.TABLE_NAME,null,null,null,null,null,null );
                 String classno=null;
+
                 A=true;
                 while (cursor.moveToNext ()){
                     delay ( 10 );
@@ -245,10 +246,13 @@ public class MainActivity extends Activity  {
                     if (co > -1) text = cursor.getString (co);
                     co = cursor.getColumnIndex ( "class" );
                     if (co > -1) classno = cursor.getString (co);
+                    co = cursor.getColumnIndex ( "importent" );
+                    imp = cursor.getString (co);
                     LCObject note=new LCObject ( "NOTE" );
                     note.put ( "CONTENT",text);
                     note.put ( "user",name );
                     note.put ( "CLASS",classno );
+                    note.put ( "IMPORTENT",imp );
                     //Log.d ( "text1111",text);
                     note.saveInBackground ().subscribe ( new Observer<LCObject> ( ) {
                         @Override
